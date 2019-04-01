@@ -35,4 +35,17 @@ public class ProductController {
         if(result.isPresent()) return result.get();
         else throw new ResourceNotFoundException("Product "+ id+" doesn't exist.");
     }
+
+    @CrossOrigin
+    @PostMapping("/api/products")
+    public Product addProduct(@RequestBody Product p){
+        return product.save(p);
+    }
+
+    @CrossOrigin
+    @PutMapping("/api/products/{id}")
+    public Product modifyProductById(@RequestBody Product p,@PathVariable Long id){
+        p.setId(id);
+        return product.save(p);
+    }
 }
