@@ -24,6 +24,13 @@ public class Product {
         this.img = img;
     }
 
+    public Product( String name, String unit, Integer category_id, String img) {
+        this.id = id;
+        this.name = name;
+        this.unit = unit;
+        this.category_id = category_id;
+        this.img = img;
+    }
     public Long getId() {
         return id;
     }

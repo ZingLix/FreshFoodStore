@@ -16,12 +16,11 @@ public class Orders {
     Date time;
     String address;
     String phone;
-    Long delivery_id;;
 
     public Orders() {
     }
 
-    public Orders(Long seller_id, Long buyer_id, Long total_price, Integer status, Date time, String address, String phone, Long delivery_id) {
+    public Orders(Long seller_id, Long buyer_id, Long total_price, Integer status, Date time, String address, String phone) {
         this.seller_id = seller_id;
         this.buyer_id = buyer_id;
         this.total_price = total_price;
@@ -29,7 +28,6 @@ public class Orders {
         this.time = time;
         this.address = address;
         this.phone = phone;
-        this.delivery_id = delivery_id;
     }
 
     public Long getId() {
@@ -96,11 +94,4 @@ public class Orders {
         this.phone = phone;
     }
 
-    public Long getDelivery_id() {
-        return delivery_id;
     }
-
-    public void setDelivery_id(Long delivery_id) {
-        this.delivery_id = delivery_id;
-    }
-}
