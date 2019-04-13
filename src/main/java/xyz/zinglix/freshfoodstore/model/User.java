@@ -1,5 +1,6 @@
 package xyz.zinglix.freshfoodstore.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,6 +10,7 @@ public class User {
     @Id
     @GeneratedValue
     Long id;
+    @Column(unique = true)
     String username;
     String password;
     Integer type;

@@ -8,9 +8,9 @@ public class Orders {
     @Id
     @GeneratedValue
     Long id;
-    Long seller_id;
-    Long buyer_id;
-    Long total_price;
+    Long sellerId;
+    Long buyerId;
+    Long totalPrice;
     Integer status;
     @Temporal(TemporalType.TIMESTAMP)
     Date time;
@@ -21,9 +21,9 @@ public class Orders {
     }
 
     public Orders(Long seller_id, Long buyer_id, Long total_price, Integer status, Date time, String address, String phone) {
-        this.seller_id = seller_id;
-        this.buyer_id = buyer_id;
-        this.total_price = total_price;
+        this.sellerId = seller_id;
+        this.buyerId = buyer_id;
+        this.totalPrice = total_price;
         this.status = status;
         this.time = time;
         this.address = address;
@@ -38,28 +38,28 @@ public class Orders {
         this.id = id;
     }
 
-    public Long getSeller_id() {
-        return seller_id;
+    public Long getSellerId() {
+        return sellerId;
     }
 
-    public void setSeller_id(Long seller_id) {
-        this.seller_id = seller_id;
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
     }
 
-    public Long getBuyer_id() {
-        return buyer_id;
+    public Long getBuyerId() {
+        return buyerId;
     }
 
-    public void setBuyer_id(Long buyer_id) {
-        this.buyer_id = buyer_id;
+    public void setBuyerId(Long buyerId) {
+        this.buyerId = buyerId;
     }
 
-    public Long getTotal_price() {
-        return total_price;
+    public Long getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setTotal_price(Long total_price) {
-        this.total_price = total_price;
+    public void setTotalPrice(Long totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public Integer getStatus() {

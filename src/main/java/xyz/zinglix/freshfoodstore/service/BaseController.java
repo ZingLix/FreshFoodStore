@@ -2,13 +2,15 @@ package xyz.zinglix.freshfoodstore.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import xyz.zinglix.freshfoodstore.dao.BaseInventoryRepository;
-import xyz.zinglix.freshfoodstore.dao.ProductRepository;
+import xyz.zinglix.freshfoodstore.dao.*;
 import xyz.zinglix.freshfoodstore.model.BaseInventory;
 import xyz.zinglix.freshfoodstore.model.Product;
+import xyz.zinglix.freshfoodstore.util.BadRequestException;
 import xyz.zinglix.freshfoodstore.util.ResourceNotFoundException;
 import xyz.zinglix.freshfoodstore.view.BaseInventoryItem;
+import xyz.zinglix.freshfoodstore.view.OrderDetail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,6 +19,14 @@ public class BaseController {
     private BaseInventoryRepository inv;
     @Autowired
     private ProductRepository product;
+    @Autowired
+    private OrderProductsRepository orderproducts;
+    @Autowired
+    private UserRepository user;
+    @Autowired
+    private OrderRepository order;
+    @Autowired
+    private UserInfoRepository userinfo;
     @GetMapping("/api/base/inventory")
     @CrossOrigin
     List<BaseInventoryItem> getInventory(){
@@ -46,6 +56,30 @@ public class BaseController {
         newb.setPrice(i.getPrice());
         newb= inv.save(newb);
         return new BaseInventoryItem(newb,p);
+    }
 
+    @GetMapping("/api/base/orders")
+    @CrossOrigin
+    List<OrderDetail> getOrders(){
+        var u=user.findAllByType(3);
+        if(u.size()==0) throw new BadRequestException("Unknown error.");
+        var baseid=u.get(0).getId();
+        var orders=order.findAllBySellerId(baseid);
+        List<OrderDetail> list=new ArrayList<>();
+        for(var o:orders){
+            OrderDetail d=new OrderDetail();
+            d.setByOrder(o);
+            var seller=userinfo.findById(o.getSellerId());
+            d.setSeller_info(seller.get());
+            var buyer=userinfo.findById(o.getBuyerId());
+            d.setBuyer_info(buyer.get());
+            var products=orderproducts.findAllByOrderId(o.getId());
+            for(var item:products){
+                var p=product.findById(item.getProductId());
+                d.addItem(p.get(),item.getCount(),item.getPrice());
+            }
+            list.add(d);
+        }
+        return list;
     }
 }

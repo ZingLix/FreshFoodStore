@@ -7,9 +7,11 @@ import javax.persistence.Id;
 @Entity
 public class Fund {
     @Id
-    @GeneratedValue
     Long id;
     Long count;
+
+
+
 
     public Long getId() {
         return id;
@@ -33,4 +35,6 @@ public class Fund {
     public Fund(Long count) {
         this.count = count;
     }
+
+
 }

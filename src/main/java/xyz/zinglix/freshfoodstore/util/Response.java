@@ -1,7 +1,7 @@
 package xyz.zinglix.freshfoodstore.util;
 
-public class ErrorResponse{
-    private String msg;
+public class Response {
+    String msg;
 
     public String getMsg() {
         return msg;
@@ -11,7 +11,8 @@ public class ErrorResponse{
         this.msg = msg;
     }
 
-    public ErrorResponse(String msg) {
+    public Response(String msg) {
+
         this.msg = msg;
     }
 }

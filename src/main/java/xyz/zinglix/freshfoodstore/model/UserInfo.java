@@ -7,6 +7,7 @@ import javax.persistence.Id;
 public class UserInfo {
     @Id
     Long id;
+    String email;
     String nickname;
     String phone;
     String address;
@@ -42,7 +43,13 @@ public class UserInfo {
     public void setAddress(String address) {
         this.address = address;
     }
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public UserInfo(Long id, String nickname, String phone, String address) {
         this.id = id;
         this.nickname = nickname;
@@ -51,5 +58,14 @@ public class UserInfo {
     }
 
     public UserInfo() {
+        nickname="";
+        phone="";
+        address="";
+    }
+    public UserInfo(Long id) {
+        this.id=id;
+        nickname="";
+        phone="";
+        address="";
     }
 }

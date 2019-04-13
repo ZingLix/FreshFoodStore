@@ -6,25 +6,17 @@ import javax.persistence.Id;
 
 @Entity
 public class BaseInventory {
-    @Id
-            @GeneratedValue
-    Long seqid;
 
-    public Long getSeqid() {
-        return seqid;
-    }
 
-    public void setSeqid(Long seqid) {
-        this.seqid = seqid;
-    }
+
 
     public BaseInventory(Long seqid, Long id, Long count, Long price) {
-        this.seqid = seqid;
+
         this.id = id;
         this.count = count;
         this.price = price;
     }
-
+    @Id
     Long id;
     Long count;
     Long price;

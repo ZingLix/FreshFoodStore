@@ -8,13 +8,21 @@ import javax.persistence.Id;
 public class OrderProducts {
     @Id
     @GeneratedValue
-    Long order_id;
-    Long product_id;
-    Integer count;
+    Long seqId;
+    Long orderId;
+    Long productId;
+    Long count;
     Long price;
 
-    public OrderProducts(Long product_id, Integer count, Long price) {
-        this.product_id = product_id;
+    public OrderProducts(Long product_id, Long count, Long price) {
+        this.productId = product_id;
+        this.count = count;
+        this.price = price;
+    }
+
+    public OrderProducts(Long order_id, Long product_id, Long count, Long price) {
+        this.orderId = order_id;
+        this.productId = product_id;
         this.count = count;
         this.price = price;
     }
@@ -22,27 +30,27 @@ public class OrderProducts {
     public OrderProducts() {
     }
 
-    public Long getOrder_id() {
-        return order_id;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(Long order_id) {
-        this.order_id = order_id;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
-    public Long getProduct_id() {
-        return product_id;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 
@@ -52,5 +60,13 @@ public class OrderProducts {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public Long getSeqId() {
+        return seqId;
+    }
+
+    public void setSeqId(Long seqId) {
+        this.seqId = seqId;
     }
 }
