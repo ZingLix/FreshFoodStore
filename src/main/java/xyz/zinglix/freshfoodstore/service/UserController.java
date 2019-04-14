@@ -9,7 +9,11 @@ import xyz.zinglix.freshfoodstore.model.Fund;
 import xyz.zinglix.freshfoodstore.model.User;
 import xyz.zinglix.freshfoodstore.model.UserInfo;
 import xyz.zinglix.freshfoodstore.util.BadRequestException;
+import xyz.zinglix.freshfoodstore.util.OrderHelper;
 import xyz.zinglix.freshfoodstore.util.Response;
+import xyz.zinglix.freshfoodstore.view.OrderDetail;
+
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -69,5 +73,11 @@ public class UserController {
         ori.setRealname(info.getRealname());
         userinfo.save(ori);
         return ori;
+    }
+
+    @GetMapping("/api/user/{id}/order")
+    @CrossOrigin
+    List<OrderDetail> getOrders(@PathVariable Long id){
+        return OrderHelper.getOrderForBuyer(id);
     }
 }

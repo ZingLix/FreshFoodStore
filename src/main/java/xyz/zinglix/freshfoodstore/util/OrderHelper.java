@@ -66,7 +66,7 @@ public class OrderHelper {
             h.orderProducts.save(op);
         }
         o.setTotalPrice(totalPrice);
-        o.setStatus(1);
+        o.setStatus(2);
         h.order.save(o);
     }
 
@@ -101,4 +101,17 @@ public class OrderHelper {
         return list;
     }
 
+    public static void modifyOrderStatus(Long order_id,Integer newStatus,String msg){
+        var o=h.order.findById(order_id);
+        if(!o.isPresent()) throw new BadRequestException("order "+order_id+" doesn't exist.");
+        var targetOrder=o.get();
+        targetOrder.setStatus(newStatus);
+        h.order.save(targetOrder);
+        Delivery d=new Delivery();
+        d.setTime(new Date());
+        d.setStatus(newStatus);
+        d.setInfo(msg);
+        d.setOrderId(targetOrder.getId());
+        h.delivery.save(d);
+    }
 }

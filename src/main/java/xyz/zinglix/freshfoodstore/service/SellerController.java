@@ -7,6 +7,7 @@ import xyz.zinglix.freshfoodstore.dao.*;
 import xyz.zinglix.freshfoodstore.model.Inventory;
 import xyz.zinglix.freshfoodstore.util.BadRequestException;
 import xyz.zinglix.freshfoodstore.util.OrderHelper;
+import xyz.zinglix.freshfoodstore.util.Request;
 import xyz.zinglix.freshfoodstore.view.InventoryItem;
 import xyz.zinglix.freshfoodstore.view.OrderDetail;
 import xyz.zinglix.freshfoodstore.view.OrderItem;
@@ -60,8 +61,8 @@ public class SellerController {
 
     @Autowired
     private InventoryRepository inventory;
-@Autowired
-private ProductRepository product;
+    @Autowired
+    private ProductRepository product;
 
     @GetMapping("/api/seller/{id}/inventory")
     @CrossOrigin
@@ -94,5 +95,27 @@ private ProductRepository product;
     @CrossOrigin
     List<OrderDetail> getStockList(@PathVariable Long seller_id){
         return OrderHelper.getOrderForBuyer(seller_id);
+    }
+
+    @GetMapping("/api/seller/{seller_id}/order")
+    @CrossOrigin
+    List<OrderDetail> getOrderList(@PathVariable Long seller_id){
+        return OrderHelper.getOrderForSeller(seller_id);
+    }
+
+    @PostMapping("/api/seller/{seller_id}/order/{order_id}")
+    @CrossOrigin
+    Response getOrderList(@PathVariable Long seller_id, @PathVariable Long order_id, @RequestBody Request request){
+        switch (request.getOperation()){
+            case 1: //发货
+                OrderHelper.modifyOrderStatus(order_id,3,"卖家发货");
+                break;
+            case 2: //更新物流信息
+                OrderHelper.modifyOrderStatus(order_id,3,request.getMessage());
+                break;
+                default:
+                    throw new BadRequestException("Unknown operation!");
+        }
+        return new Response("success");
     }
 }
