@@ -3,22 +3,20 @@ package xyz.zinglix.freshfoodstore.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.*;
-import xyz.zinglix.freshfoodstore.dao.BaseInventoryRepository;
-import xyz.zinglix.freshfoodstore.dao.ProductRepository;
-import xyz.zinglix.freshfoodstore.dao.UserInfoRepository;
-import xyz.zinglix.freshfoodstore.dao.UserRepository;
-import xyz.zinglix.freshfoodstore.model.BaseInventory;
+import xyz.zinglix.freshfoodstore.dao.*;
 import xyz.zinglix.freshfoodstore.model.Inventory;
-import xyz.zinglix.freshfoodstore.model.Product;
 import xyz.zinglix.freshfoodstore.util.BadRequestException;
 import xyz.zinglix.freshfoodstore.util.OrderHelper;
-import xyz.zinglix.freshfoodstore.util.OrderHelper;
+import xyz.zinglix.freshfoodstore.view.InventoryItem;
+import xyz.zinglix.freshfoodstore.view.OrderDetail;
 import xyz.zinglix.freshfoodstore.view.OrderItem;
 import xyz.zinglix.freshfoodstore.util.Response;
 import xyz.zinglix.freshfoodstore.view.BaseInventoryItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class SellerController {
@@ -38,8 +36,6 @@ public class SellerController {
     @Autowired
     private UserInfoRepository userinfo;
 
-
-
     @PostMapping("/api/seller/{id}/products")
     @CrossOrigin
     Response placeOrder(@RequestBody List<OrderItem> products, @PathVariable Long id){
@@ -50,7 +46,7 @@ public class SellerController {
             var productinfo=productinfores.get();
             Inventory inv=new Inventory();
             inv.setPrice(productinfo.getPrice());
-            inv.setProduct_id(p.getId());
+            inv.setProductId(p.getId());
             list.add(Pair.of(inv,p.getCount()));
         }
         var base=user.findAllByType(3);
@@ -60,5 +56,43 @@ public class SellerController {
         var helper=new OrderHelper();
         helper.createOrder(id,baseid,list,sellerinfo.getAddress(),sellerinfo.getPhone());
         return new Response("success");
+    }
+
+    @Autowired
+    private InventoryRepository inventory;
+@Autowired
+private ProductRepository product;
+
+    @GetMapping("/api/seller/{id}/inventory")
+    @CrossOrigin
+    List<InventoryItem> getInventory(@PathVariable Long id){
+        var invlist=inventory.findAllBySellerId(id);
+        Map<Long,InventoryItem> m=new HashMap<>();
+        for(var i:invlist){
+            var productId=i.getProductId();
+            if(!m.containsKey(productId)){
+                m.put(productId,new InventoryItem(productId,product.findById(productId).get()));
+            }
+            m.get(productId).add(i);
+        }
+        List<InventoryItem> list=new ArrayList<>();
+        for(var inv:m.values()){
+            list.add(inv);
+        }
+        return list;
+    }
+
+    @PostMapping("/api/seller/{seller_id}/inventory/{id}")
+    @CrossOrigin
+    Inventory setInventory(@PathVariable Long seller_id,@PathVariable Long id,@RequestBody Inventory inv){
+        inv.setId(id);
+        inventory.save(inv);
+        return inv;
+    }
+
+    @GetMapping("/api/seller/{seller_id}/stock")
+    @CrossOrigin
+    List<OrderDetail> getStockList(@PathVariable Long seller_id){
+        return OrderHelper.getOrderForBuyer(seller_id);
     }
 }

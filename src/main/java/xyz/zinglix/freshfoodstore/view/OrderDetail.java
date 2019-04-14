@@ -1,5 +1,6 @@
 package xyz.zinglix.freshfoodstore.view;
 
+import xyz.zinglix.freshfoodstore.model.Delivery;
 import xyz.zinglix.freshfoodstore.model.Product;
 import xyz.zinglix.freshfoodstore.model.UserInfo;
 import xyz.zinglix.freshfoodstore.model.Orders;
@@ -56,6 +57,7 @@ public class OrderDetail {
     String address;
     String phone;
     List<Item> products;
+    List<Delivery> delivery_info;
 
     public void setByOrder(Orders o){
         id=o.getId();
@@ -72,8 +74,18 @@ public class OrderDetail {
         products.add(new Item(p,count,price));
     }
 
+    public void addDeliveryInfo(Delivery d){delivery_info.add(d);}
+
     public Long getSeller_id() {
         return seller_id;
+    }
+
+    public List<Delivery> getDelivery_info() {
+        return delivery_info;
+    }
+
+    public void setDelivery_info(List<Delivery> delivery_info) {
+        this.delivery_info = delivery_info;
     }
 
     public Long getId() {
@@ -162,5 +174,6 @@ public class OrderDetail {
 
     public OrderDetail() {
         products=new ArrayList<>();
+        delivery_info=new ArrayList<>();
     }
 }

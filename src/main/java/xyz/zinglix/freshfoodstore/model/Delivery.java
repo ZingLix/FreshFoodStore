@@ -8,7 +8,7 @@ public class Delivery {
     @Id
     @GeneratedValue
     Long id;
-    Long delivery_id;
+    Long orderId;
     @Temporal(TemporalType.TIMESTAMP)
     Date time;
     String info;
@@ -22,12 +22,12 @@ public class Delivery {
         this.id = id;
     }
 
-    public Long getDelivery_id() {
-        return delivery_id;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setDelivery_id(Long delivery_id) {
-        this.delivery_id = delivery_id;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public Date getTime() {
@@ -57,8 +57,8 @@ public class Delivery {
     public Delivery() {
     }
 
-    public Delivery(Long delivery_id, Date time, String info, Integer status) {
-        this.delivery_id = delivery_id;
+    public Delivery(Long orderId, Date time, String info, Integer status) {
+        this.orderId = orderId;
         this.time = time;
         this.info = info;
         this.status = status;

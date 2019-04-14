@@ -3,17 +3,18 @@ package xyz.zinglix.freshfoodstore.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class Inventory {
     @Id
     @GeneratedValue
     Long id;
-    Long seller_id;
-    Long product_id;
-    Integer count;
+    Long sellerId;
+    Long productId;
+    Long count;
     Long price;
-    Long delivery_id;
+    Date time;
 
     public Long getId() {
         return id;
@@ -23,27 +24,27 @@ public class Inventory {
         this.id = id;
     }
 
-    public Long getSeller_id() {
-        return seller_id;
+    public Long getSellerId() {
+        return sellerId;
     }
 
-    public void setSeller_id(Long seller_id) {
-        this.seller_id = seller_id;
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
     }
 
-    public Long getProduct_id() {
-        return product_id;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 
@@ -55,20 +56,20 @@ public class Inventory {
         this.price = price;
     }
 
-    public Long getDelivery_id() {
-        return delivery_id;
+    public Date getTime() {
+        return time;
     }
 
-    public void setDelivery_id(Long delivery_id) {
-        this.delivery_id = delivery_id;
+    public void setTime(Date time) {
+        this.time = time;
     }
 
-    public Inventory(Long seller_id, Long product_id, Integer count, Long price, Long delivery_id) {
-        this.seller_id = seller_id;
-        this.product_id = product_id;
+    public Inventory(Long seller_id, Long product_id, Long count, Long price, Date time) {
+        this.sellerId = seller_id;
+        this.productId = product_id;
         this.count = count;
         this.price = price;
-        this.delivery_id = delivery_id;
+        this.time = time;
     }
 
     public Inventory() {

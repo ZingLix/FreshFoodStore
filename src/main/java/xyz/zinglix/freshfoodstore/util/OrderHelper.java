@@ -3,12 +3,12 @@ package xyz.zinglix.freshfoodstore.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
-import xyz.zinglix.freshfoodstore.dao.DeliveryRepository;
-import xyz.zinglix.freshfoodstore.dao.OrderProductsRepository;
-import xyz.zinglix.freshfoodstore.dao.OrderRepository;
+import xyz.zinglix.freshfoodstore.dao.*;
 import xyz.zinglix.freshfoodstore.model.*;
+import xyz.zinglix.freshfoodstore.view.OrderDetail;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +23,12 @@ public class OrderHelper {
     @Autowired
     DeliveryRepository delivery;
 
+    @Autowired
+    UserInfoRepository userinfo;
+
+    @Autowired
+    ProductRepository product;
+
     public static OrderHelper h;
 
     public OrderHelper() {
@@ -34,10 +40,12 @@ public class OrderHelper {
         h.order = this.order;
         h.orderProducts=this.orderProducts;
         h.delivery=this.delivery;
+        h.userinfo=this.userinfo;
+        h.product=this.product;
     }
 
 
-    public void createOrder(Long buyerId, Long sellerId, List<Pair<Inventory,Long>> products, String address, String phone){
+    public static void createOrder(Long buyerId, Long sellerId, List<Pair<Inventory,Long>> products, String address, String phone){
         Orders o=new Orders();
         o.setBuyerId(buyerId);
         o.setSellerId(sellerId);
@@ -52,7 +60,7 @@ public class OrderHelper {
             totalPrice+=p.getSecond()*p.getFirst().getPrice();
             OrderProducts op=new OrderProducts();
             op.setOrderId(o.getId());
-            op.setProductId(p.getFirst().getProduct_id());
+            op.setProductId(p.getFirst().getProductId());
             op.setPrice(p.getFirst().getPrice());
             op.setCount(p.getSecond());
             h.orderProducts.save(op);
@@ -61,4 +69,36 @@ public class OrderHelper {
         o.setStatus(1);
         h.order.save(o);
     }
+
+    public static List<OrderDetail> getOrderForBuyer(Long buyerId){
+        var orders=h.order.findAllByBuyerId(buyerId);
+        return handleOrders(orders);
+    }
+
+    public static List<OrderDetail> getOrderForSeller(Long sellerId){
+        var orders=h.order.findAllBySellerId(sellerId);
+        return handleOrders(orders);
+    }
+
+    private static List<OrderDetail> handleOrders(List<Orders> orders){
+        List<OrderDetail> list=new ArrayList<>();
+        for(var o:orders){
+            OrderDetail d=new OrderDetail();
+            d.setByOrder(o);
+            var seller=h.userinfo.findById(o.getSellerId());
+            d.setSeller_info(seller.get());
+            var buyer=h.userinfo.findById(o.getBuyerId());
+            d.setBuyer_info(buyer.get());
+            var products=h.orderProducts.findAllByOrderId(o.getId());
+            for(var item:products){
+                var p=h.product.findById(item.getProductId());
+                d.addItem(p.get(),item.getCount(),item.getPrice());
+            }
+            var deliveryinfo=h.delivery.findAllByOrderId(o.getId());
+            d.setDelivery_info(deliveryinfo);
+            list.add(d);
+        }
+        return list;
+    }
+
 }
