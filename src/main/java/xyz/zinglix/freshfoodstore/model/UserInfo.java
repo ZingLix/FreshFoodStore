@@ -8,9 +8,18 @@ public class UserInfo {
     @Id
     Long id;
     String email;
+    String realname;
     String nickname;
     String phone;
     String address;
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
 
     public Long getId() {
         return id;

@@ -66,6 +66,7 @@ public class UserController {
         ori.setAddress(info.getAddress());
         ori.setPhone(info.getPhone());
         ori.setEmail(info.getEmail());
+        ori.setRealname(info.getRealname());
         userinfo.save(ori);
         return ori;
     }
