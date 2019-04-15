@@ -55,7 +55,7 @@ public class SellerController {
         var baseid=base.get(0).getId();
         var sellerinfo=userinfo.findById(id).get();
         var helper=new OrderHelper();
-        helper.createOrder(id,baseid,list,sellerinfo.getAddress(),sellerinfo.getPhone());
+        helper.createOrder(id,baseid,list,sellerinfo.getAddress(),sellerinfo.getPhone(),sellerinfo.getRealname());
         return new Response("success");
     }
 

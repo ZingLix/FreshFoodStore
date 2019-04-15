@@ -15,6 +15,7 @@ public class Orders {
     @Temporal(TemporalType.TIMESTAMP)
     Date time;
     String address;
+    String realname;
     String phone;
 
     public Orders() {
@@ -94,4 +95,11 @@ public class Orders {
         this.phone = phone;
     }
 
+    public String getRealname() {
+        return realname;
     }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
+}

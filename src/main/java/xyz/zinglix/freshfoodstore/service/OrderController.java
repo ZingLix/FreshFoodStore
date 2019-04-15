@@ -82,7 +82,7 @@ public class OrderController {
             if(!i.isPresent()) throw new BadRequestException("Inventory "+o.getId()+" doesn't exist.");
             invlist.add(Pair.of(i.get(),o.getCount()));
         }
-        OrderHelper.createOrder(orderRequest.getId(),seller_id,invlist,orderRequest.getAddress(),orderRequest.getPhone());
+        OrderHelper.createOrder(orderRequest.getId(),seller_id,invlist,orderRequest.getAddress(),orderRequest.getPhone(),orderRequest.getRealname());
         return new Response("success");
     }
 }

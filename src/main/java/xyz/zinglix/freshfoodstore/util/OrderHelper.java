@@ -45,7 +45,7 @@ public class OrderHelper {
     }
 
 
-    public static void createOrder(Long buyerId, Long sellerId, List<Pair<Inventory,Long>> products, String address, String phone){
+    public static void createOrder(Long buyerId, Long sellerId, List<Pair<Inventory,Long>> products, String address, String phone, String realname){
         Orders o=new Orders();
         o.setBuyerId(buyerId);
         o.setSellerId(sellerId);
@@ -53,6 +53,7 @@ public class OrderHelper {
         o.setTime(new Date());
         o.setAddress(address);
         o.setPhone(phone);
+        o.setRealname(realname);
         o.setTotalPrice(0L);
         o=h.order.save(o);
         Long totalPrice=0L;
