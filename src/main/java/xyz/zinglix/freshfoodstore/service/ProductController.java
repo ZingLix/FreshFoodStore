@@ -20,6 +20,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+class ProductWithMinPrice{
+    Long id;
+    Long minprice;
+    Product product;
+
+    public ProductWithMinPrice() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getMinprice() {
+        return minprice;
+    }
+
+    public void setMinprice(Long minprice) {
+        this.minprice = minprice;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+}
 
 @RestController
 public class ProductController {
@@ -77,5 +109,25 @@ public class ProductController {
         List<ProductInventoryInfo> list=new ArrayList<>();
         for(var p:map.values()) list.add(p);
         return list;
+    }
+
+    @GetMapping("/api/products/mainpage")
+    public List<ProductWithMinPrice> getProductsWithMinPrice(){
+        List<Product> products=product.findAll();
+        List<ProductWithMinPrice> res=new ArrayList<>();
+        for(var p:products){
+            Long minprice=Long.MAX_VALUE;
+            List<Inventory> inv=inventory.findAllByProductId(p.getId());
+            for(var i:inv){
+                if(i.getPrice()!=0&&i.getPrice()<minprice) minprice=i.getPrice();
+            }
+            ProductWithMinPrice tmp=new ProductWithMinPrice();
+            tmp.setId(p.getId());
+            tmp.setProduct(p);
+            tmp.setMinprice(minprice==Long.MAX_VALUE?0:minprice);
+            res.add(tmp);
+        }
+        return res;
+
     }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 public interface InventoryRepository extends JpaRepository<Inventory,Long> {
     List<Inventory> findAllBySellerId(Long id);
     List<Inventory> findAllByProductIdAndCountGreaterThan(Long id,Long lowerbound);
+    List<Inventory> findAllByProductId(Long id);
 }
