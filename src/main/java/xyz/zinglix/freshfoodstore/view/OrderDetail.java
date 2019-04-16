@@ -56,6 +56,7 @@ public class OrderDetail {
     Date time;
     String address;
     String phone;
+    String realname;
     List<Item> products;
     List<Delivery> delivery_info;
 
@@ -68,6 +69,7 @@ public class OrderDetail {
         time=o.getTime();
         address=o.getAddress();
         phone=o.getPhone();
+        realname=o.getRealname();
     }
 
     public void addItem(Product p,Long count,Long price){
@@ -170,6 +172,14 @@ public class OrderDetail {
 
     public void setProducts(List<Item> products) {
         this.products = products;
+    }
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
     }
 
     public OrderDetail() {
