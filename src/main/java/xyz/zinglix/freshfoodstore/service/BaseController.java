@@ -83,6 +83,7 @@ public class BaseController {
                 var or=o.get();
                 or.setStatus(4);
                 order.save(or);
+                FundUtil.finishOrder(or.getSellerId(),or.getTotalPrice(),or.getId());
                 var products=orderproducts.findAllByOrderId(or.getId());
                 for(var p:products){
                     Inventory inv=new Inventory();
