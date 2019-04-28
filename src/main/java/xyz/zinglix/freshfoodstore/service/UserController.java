@@ -9,7 +9,7 @@ import xyz.zinglix.freshfoodstore.model.Fund;
 import xyz.zinglix.freshfoodstore.model.User;
 import xyz.zinglix.freshfoodstore.model.UserInfo;
 import xyz.zinglix.freshfoodstore.util.BadRequestException;
-import xyz.zinglix.freshfoodstore.util.OrderHelper;
+import xyz.zinglix.freshfoodstore.util.OrderUtil;
 import xyz.zinglix.freshfoodstore.util.Request;
 import xyz.zinglix.freshfoodstore.util.Response;
 import xyz.zinglix.freshfoodstore.view.OrderDetail;
@@ -79,14 +79,15 @@ public class UserController {
     @GetMapping("/api/user/{id}/order")
     @CrossOrigin
     List<OrderDetail> getOrders(@PathVariable Long id){
-        return OrderHelper.getOrderForBuyer(id);
+        return OrderUtil.getOrderForBuyer(id);
     }
+
     @PostMapping("/api/user/{id}/order/{order_id}")
     @CrossOrigin
     Response getOrders(@PathVariable Long id, @PathVariable Long order_id, @RequestBody Request req){
         switch (req.getOperation()){
             case 1: //确认收货
-                OrderHelper.modifyOrderStatus(order_id,4,req.getMessage());
+                OrderUtil.modifyOrderStatus(order_id,4,"买家确认收货");
                 break;
                 default:throw new BadRequestException("Unknown operation");
         }

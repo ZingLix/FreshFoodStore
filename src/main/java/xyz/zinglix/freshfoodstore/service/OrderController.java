@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import xyz.zinglix.freshfoodstore.dao.InventoryRepository;
 import xyz.zinglix.freshfoodstore.model.Inventory;
 import xyz.zinglix.freshfoodstore.util.BadRequestException;
-import xyz.zinglix.freshfoodstore.util.OrderHelper;
+import xyz.zinglix.freshfoodstore.util.OrderUtil;
 import xyz.zinglix.freshfoodstore.util.Response;
-import xyz.zinglix.freshfoodstore.view.OrderDetail;
 import xyz.zinglix.freshfoodstore.view.OrderItem;
 
 import java.util.ArrayList;
@@ -75,14 +74,14 @@ public class OrderController {
     @PostMapping("/api/order/{seller_id}")
     @CrossOrigin
     Response placeOrder(@PathVariable Long seller_id, @RequestBody OrderRequest orderRequest){
-        OrderHelper helper=new OrderHelper();
+        OrderUtil helper=new OrderUtil();
         List<Pair<Inventory,Long>> invlist=new ArrayList<>();
         for(var o:orderRequest.getOrder()){
             var i = inv.findById(o.getId());
             if(!i.isPresent()) throw new BadRequestException("Inventory "+o.getId()+" doesn't exist.");
             invlist.add(Pair.of(i.get(),o.getCount()));
         }
-        OrderHelper.createOrder(orderRequest.getId(),seller_id,invlist,orderRequest.getAddress(),orderRequest.getPhone(),orderRequest.getRealname());
+        OrderUtil.createOrder(orderRequest.getId(),seller_id,invlist,orderRequest.getAddress(),orderRequest.getPhone(),orderRequest.getRealname());
         return new Response("success");
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import xyz.zinglix.freshfoodstore.dao.*;
 import xyz.zinglix.freshfoodstore.model.Inventory;
 import xyz.zinglix.freshfoodstore.util.BadRequestException;
-import xyz.zinglix.freshfoodstore.util.OrderHelper;
+import xyz.zinglix.freshfoodstore.util.OrderUtil;
 import xyz.zinglix.freshfoodstore.util.Request;
 import xyz.zinglix.freshfoodstore.view.InventoryItem;
 import xyz.zinglix.freshfoodstore.view.OrderDetail;
@@ -54,7 +54,7 @@ public class SellerController {
         if(base.size()==0) throw new BadRequestException("Unknown error.");
         var baseid=base.get(0).getId();
         var sellerinfo=userinfo.findById(id).get();
-        var helper=new OrderHelper();
+        var helper=new OrderUtil();
         helper.createOrder(id,baseid,list,sellerinfo.getAddress(),sellerinfo.getPhone(),sellerinfo.getRealname());
         return new Response("success");
     }
@@ -94,13 +94,13 @@ public class SellerController {
     @GetMapping("/api/seller/{seller_id}/stock")
     @CrossOrigin
     List<OrderDetail> getStockList(@PathVariable Long seller_id){
-        return OrderHelper.getOrderForBuyer(seller_id);
+        return OrderUtil.getOrderForBuyer(seller_id);
     }
 
     @GetMapping("/api/seller/{seller_id}/order")
     @CrossOrigin
     List<OrderDetail> getOrderList(@PathVariable Long seller_id){
-        return OrderHelper.getOrderForSeller(seller_id);
+        return OrderUtil.getOrderForSeller(seller_id);
     }
 
     @PostMapping("/api/seller/{seller_id}/order/{order_id}")
@@ -108,10 +108,10 @@ public class SellerController {
     Response getOrderList(@PathVariable Long seller_id, @PathVariable Long order_id, @RequestBody Request request){
         switch (request.getOperation()){
             case 1: //发货
-                OrderHelper.modifyOrderStatus(order_id,3,"卖家发货");
+                OrderUtil.modifyOrderStatus(order_id,3,"卖家发货");
                 break;
             case 2: //更新物流信息
-                OrderHelper.modifyOrderStatus(order_id,3,request.getMessage());
+                OrderUtil.modifyOrderStatus(order_id,3,request.getMessage());
                 break;
                 default:
                     throw new BadRequestException("Unknown operation!");

@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class OrderHelper {
+public class OrderUtil {
     @Autowired
     OrderRepository order;
 
@@ -29,9 +29,12 @@ public class OrderHelper {
     @Autowired
     ProductRepository product;
 
-    public static OrderHelper h;
+    @Autowired
+    FundRepository fund;
 
-    public OrderHelper() {
+    public static OrderUtil h;
+
+    public OrderUtil() {
     }
 
     @PostConstruct
@@ -42,6 +45,7 @@ public class OrderHelper {
         h.delivery=this.delivery;
         h.userinfo=this.userinfo;
         h.product=this.product;
+        h.fund=this.fund;
     }
 
 
@@ -66,8 +70,13 @@ public class OrderHelper {
             op.setCount(p.getSecond());
             h.orderProducts.save(op);
         }
+        if(h.fund.findById(buyerId).get().getCount()<totalPrice){
+            h.order.deleteById(o.getId());
+            throw new BadRequestException("余额不足");
+        }
         o.setTotalPrice(totalPrice);
         o.setStatus(2);
+        FundUtil.placeOrder(o.getBuyerId(),totalPrice,o.getId());
         h.order.save(o);
     }
 
@@ -106,6 +115,8 @@ public class OrderHelper {
         var o=h.order.findById(order_id);
         if(!o.isPresent()) throw new BadRequestException("order "+order_id+" doesn't exist.");
         var targetOrder=o.get();
+        if(newStatus==4 && targetOrder.getStatus()==4) return;
+        if(newStatus==4) FundUtil.finishOrder(targetOrder.getSellerId(),targetOrder.getTotalPrice(),targetOrder.getId());
         targetOrder.setStatus(newStatus);
         h.order.save(targetOrder);
         Delivery d=new Delivery();

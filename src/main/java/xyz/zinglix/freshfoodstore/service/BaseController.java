@@ -10,7 +10,6 @@ import xyz.zinglix.freshfoodstore.util.*;
 import xyz.zinglix.freshfoodstore.view.BaseInventoryItem;
 import xyz.zinglix.freshfoodstore.view.OrderDetail;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -71,7 +70,7 @@ public class BaseController {
         var u=user.findAllByType(3);
         if(u.size()==0) throw new BadRequestException("Unknown error.");
         var baseid=u.get(0).getId();
-        OrderHelper helper=new OrderHelper();
+        OrderUtil helper=new OrderUtil();
         return helper.getOrderForSeller(baseid);
     }
 

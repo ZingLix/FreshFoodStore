@@ -10,9 +10,6 @@ public class Fund {
     Long id;
     Long count;
 
-
-
-
     public Long getId() {
         return id;
     }
