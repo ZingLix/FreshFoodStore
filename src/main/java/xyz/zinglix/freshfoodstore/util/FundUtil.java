@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.zinglix.freshfoodstore.dao.FundLogRepository;
 import xyz.zinglix.freshfoodstore.dao.FundRepository;
-import xyz.zinglix.freshfoodstore.model.Fund;
 import xyz.zinglix.freshfoodstore.model.FundLog;
 
 import javax.annotation.PostConstruct;
@@ -44,6 +43,7 @@ public class FundUtil {
     }
 
     static void modifyFund(Long user_id,Integer type,Integer reason,Long count,String msg,Long order_id){
+        if(count<=0) throw new BadRequestException("金额非法！");
         var f = h.fundRepository.findById(user_id);
         if(!f.isPresent()) throw new BadRequestException("User " + user_id+" doesn't exist.");
         var fund=f.get();
@@ -61,10 +61,10 @@ public class FundUtil {
         FundLog log=new FundLog();
         log.setCount(count);
         log.setMsg(msg);
-        log.setOrder_id(order_id);
+        log.setOrderId(order_id);
         log.setReason(reason);
         log.setType(type);
-        log.setUser_id(user_id);
+        log.setUserId(user_id);
         log.setTime(new Date());
         h.fundLogRepository.save(log);
     }

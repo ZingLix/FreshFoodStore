@@ -8,23 +8,23 @@ public class FundLog {
     @Id
     @GeneratedValue
     Long id;
-    Long user_id;
+    Long userId;
     @Temporal(TemporalType.TIMESTAMP)
     Date time;
     Integer type;
     Long count;
     Integer reason;
-    Long order_id;
+    Long orderId;
     String msg;
 
 
-    public FundLog(Long user_id, Date time, Integer type, Long count, Integer reason, Long order_id, String msg) {
-        this.user_id = user_id;
+    public FundLog(Long userId, Date time, Integer type, Long count, Integer reason, Long orderId, String msg) {
+        this.userId = userId;
         this.time = time;
         this.type = type;
         this.count = count;
         this.reason = reason;
-        this.order_id = order_id;
+        this.orderId = orderId;
         this.msg = msg;
     }
 
@@ -44,12 +44,12 @@ public class FundLog {
         this.id = id;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Integer getType() {
@@ -76,12 +76,12 @@ public class FundLog {
         this.reason = reason;
     }
 
-    public Long getOrder_id() {
-        return order_id;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(Long order_id) {
-        this.order_id = order_id;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public String getMsg() {
@@ -95,12 +95,12 @@ public class FundLog {
     public FundLog() {
     }
 
-    public FundLog(Long user_id, Integer type, Long count, Integer reason, Long order_id, String msg) {
-        this.user_id = user_id;
+    public FundLog(Long userId, Integer type, Long count, Integer reason, Long orderId, String msg) {
+        this.userId = userId;
         this.type = type;
         this.count = count;
         this.reason = reason;
-        this.order_id = order_id;
+        this.orderId = orderId;
         this.msg = msg;
     }
 }
