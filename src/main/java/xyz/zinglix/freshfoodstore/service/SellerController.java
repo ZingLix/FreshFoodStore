@@ -36,6 +36,8 @@ public class SellerController {
     private UserRepository user;
     @Autowired
     private UserInfoRepository userinfo;
+    @Autowired
+    private OrderRepository order;
 
     @PostMapping("/api/seller/{id}/products")
     @CrossOrigin
@@ -117,5 +119,14 @@ public class SellerController {
                     throw new BadRequestException("Unknown operation!");
         }
         return new Response("success");
+    }
+
+    @GetMapping("/api/seller/{id}/overview")
+    @CrossOrigin
+    Map<Long,Long> getOverview(@PathVariable Long id){
+        Map<Long,Long> map=new HashMap<>();
+        map.put(2L,order.countOrdersBySellerIdAndStatus(id,2));
+        map.put(3L,order.countOrdersBySellerIdAndStatus(id,3));
+        return map;
     }
 }

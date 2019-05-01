@@ -3,6 +3,7 @@ package xyz.zinglix.freshfoodstore.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.zinglix.freshfoodstore.dao.FundRepository;
+import xyz.zinglix.freshfoodstore.dao.OrderRepository;
 import xyz.zinglix.freshfoodstore.dao.UserInfoRepository;
 import xyz.zinglix.freshfoodstore.dao.UserRepository;
 import xyz.zinglix.freshfoodstore.model.Fund;
@@ -14,7 +15,9 @@ import xyz.zinglix.freshfoodstore.util.Request;
 import xyz.zinglix.freshfoodstore.util.Response;
 import xyz.zinglix.freshfoodstore.view.OrderDetail;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -24,7 +27,8 @@ public class UserController {
     private UserInfoRepository userinfo;
     @Autowired
     private FundRepository fund;
-
+    @Autowired
+    private OrderRepository order;
     @PostMapping("/api/user")
     @CrossOrigin
     Response registerUser(@RequestBody User u){
@@ -61,6 +65,7 @@ public class UserController {
         if(!info.isPresent()) throw new BadRequestException("用户不存在，id:"+id);
         return info.get();
     }
+
     @PostMapping("/api/user/{id}/info")
     @CrossOrigin
     UserInfo modifyUserInfo(@PathVariable Long id, @RequestBody UserInfo info){
@@ -93,5 +98,14 @@ public class UserController {
         }
 
         return new Response("success");
+    }
+
+    @GetMapping("/api/user/{id}/overview")
+    @CrossOrigin
+    Map<Long,Long> getUserOverview(@PathVariable Long id){
+        Map<Long,Long> map=new HashMap<>();
+        map.put(2L,order.countOrdersByBuyerIdAndStatus(id,2));
+        map.put(3L,order.countOrdersByBuyerIdAndStatus(id,3));
+        return map;
     }
 }
