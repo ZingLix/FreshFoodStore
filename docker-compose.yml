@@ -1,0 +1,22 @@
+version: "3"
+services:
+  maven:
+    image: maven:3.6.1-jdk-11
+    volumes:
+      - /home/zinglix/docker/maven/.m2:/root/.m2
+      - .:/usr/src/mymaven
+      - ./target:/usr/src/mymaven/target
+      - /home/zinglix/docker/nginx/static/freshfoodstore/img:/img
+      - ./application.properties:/application.properties
+    command: mvn spring-boot:run -f /usr/src/mymaven/pom.xml
+    container_name: freshfoodstore
+    expose:
+      - "8080"
+    networks:
+      - nginx_default
+      - mysql_default
+networks:
+  nginx_default:
+    external: true
+  mysql_default:
+    external: true
