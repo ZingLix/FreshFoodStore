@@ -15,13 +15,20 @@
 首先你需要一个 `application.properties` 以控制程序相关设置，如下是示例
 
 ```
-spring.datasource.url=jdbc:mysql://mysql:3306/FreshFoodStore?useSSL=false&serverTimezone=UTC    # 数据库链接，请确保存在该库
-spring.datasource.username=root                 # 数据库登录用户名
-spring.datasource.password=password             # 密码
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver    # driver 类型，示例为 mysql 
-# server.port = 8080                            # 服务器端口，默认8080
-spring.jpa.properties.hibernate.hbm2ddl.auto=update     # spring 对于数据库的处理，无需更改
-xyz.zinglix.freshfoodstore.imgpath= /img/               # 上传图片的存储文件夹，请确保该路径可被正确分发，使用 docker 构建则使用该路径
+# 数据库链接，请确保存在该库
+spring.datasource.url=jdbc:mysql://mysql:3306/FreshFoodStore?useSSL=false&serverTimezone=UTC
+# 数据库登录用户名
+spring.datasource.username=root
+# 密码
+spring.datasource.password=password
+# driver 类型，示例为 mysql 
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+# 服务器端口，默认8080
+# server.port = 8080
+# spring 对于数据库的处理，无需更改
+spring.jpa.properties.hibernate.hbm2ddl.auto=update
+# 上传图片的存储文件夹，请确保该路径可被正确分发，使用 docker 构建则使用该路径
+xyz.zinglix.freshfoodstore.imgpath= /img/
 ```
 
 之后提供了两种构建方式
