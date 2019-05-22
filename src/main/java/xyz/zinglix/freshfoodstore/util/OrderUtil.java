@@ -27,6 +27,14 @@ public class OrderUtil {
     UserInfoRepository userinfo;
 
     @Autowired
+    UserRepository user;
+
+    @Autowired
+    InventoryRepository inventory;
+
+    @Autowired
+    BaseInventoryRepository baseInventory;
+    @Autowired
     ProductRepository product;
 
     @Autowired
@@ -44,6 +52,9 @@ public class OrderUtil {
         h.orderProducts=this.orderProducts;
         h.delivery=this.delivery;
         h.userinfo=this.userinfo;
+        h.user=this.user;
+        h.inventory=this.inventory;
+        h.baseInventory=this.baseInventory;
         h.product=this.product;
         h.fund=this.fund;
     }
@@ -74,8 +85,32 @@ public class OrderUtil {
             h.order.deleteById(o.getId());
             throw new BadRequestException("余额不足");
         }
+        var u=h.user.findById(sellerId);
+        if(!u.isPresent()){
+            throw new BadRequestException("非法请求");
+        }
+        if(u.get().getType()!=3){
+            for(var p:products){
+                var inv = h.inventory.findById(p.getFirst().getId());
+                if(inv.isPresent()==false) throw new BadRequestException("商品不存在");
+                var inven=inv.get();
+                if(inven.getCount()<p.getSecond()) throw new BadRequestException("库存不足");
+                inven.setCount(inven.getCount()-p.getSecond());
+                h.inventory.save(inven);
+            }
+        }else{
+            for(var p:products){
+                var inv=h.baseInventory.findById(p.getFirst().getProductId());
+                if(!inv.isPresent()) throw new BadRequestException("商品不存在");
+                var inven=inv.get();
+                if(inven.getCount()<p.getSecond())  throw new BadRequestException("库存不足");
+                inven.setCount(inven.getCount()-p.getSecond());
+                h.baseInventory.save(inven);
+            }
+        }
         o.setTotalPrice(totalPrice);
         o.setStatus(2);
+
         FundUtil.placeOrder(o.getBuyerId(),totalPrice,o.getId());
         h.order.save(o);
     }
